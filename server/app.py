@@ -33,7 +33,6 @@ class Index(Resource):
 
 api.add_resource(Index, '/')
 
-
 class Newsletters(Resource):
 
     def get(self):
@@ -47,26 +46,26 @@ class Newsletters(Resource):
 
         return response
 
+    def post(self):
+
+        new_record = Newsletter(
+            title=request.form['title'],
+            body=request.form['body'],
+        )
+
+        db.session.add(new_record)
+        db.session.commit()
+
+        response_dict = new_record.to_dict()
+
+        response = make_response(
+            jsonify(response_dict),
+            201,
+        )
+
+        return response
+
 api.add_resource(Newsletters, '/newsletters')
-
-def post(self):
-
-    new_record = Newsletter(
-        title=request.form['title'],
-        body=request.form['body'],
-    )
-
-    db.session.add(new_record)
-    db.session.commit()
-
-    response_dict = new_record.to_dict()
-
-    response = make_response(
-        jsonify(response_dict),
-        201,
-    )
-
-    return response
 
 class NewsletterByID(Resource):
 
